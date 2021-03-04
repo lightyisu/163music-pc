@@ -8,6 +8,7 @@ import { Redirect, Route,Switch } from 'react-router-dom';
 import Discovery from './pages/Discovery';
 import Mymusic from './pages/Mymusic';
 import Friends from './pages/Friends';
+import PlayBar from './pages/playBar';
 const App=props=>{
   return (
     <div>
@@ -20,6 +21,7 @@ const App=props=>{
         <Route path='/friends' component={Friends}/>
       </Switch>
       <Footer/>
+      <PlayBar/>
     </div>
   )
 }

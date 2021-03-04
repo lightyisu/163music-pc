@@ -58,5 +58,9 @@ const getSettleSinger=()=>(
     request.get('/artist/list?limit=5&cat=5001')
 )
 
+const getSongDetail=(id)=>(
+    request.get(`/song/detail?ids=${id}`)
+)
+
 export default request
-export {getBanner,getHotRecommend,getNewAlbum,getTopranking,getSettleSinger}
+export {getBanner,getHotRecommend,getNewAlbum,getTopranking,getSettleSinger,getSongDetail}

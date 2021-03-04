@@ -1,0 +1,78 @@
+div.playBar
+    position fixed 
+    display flex
+    color #fff
+    justify-content center
+    height 50px
+    width 100%
+    bottom 0
+    background-position 0px -4px
+    background-repeat repeat 
+    i
+        cursor pointer
+        display inline-block
+        height 40px
+        width 30px
+div.bar-control
+    width 120px
+    .previous-btn
+        background-position 0px -120px
+    .play-btn
+        width 37px
+        background-position 0px -200px
+    .next-btn
+        background-position -80px -120px
+    .pause-btn
+        width 37px
+        background-position 0px -160px
+div.bar-playinfo
+    display flex
+    width 600px
+    div.ant-slider-rail 
+        background url('../../assets/img/progress_bar.png') no-repeat
+        height 7px
+    div.ant-slider-track    
+        background url('../../assets/img/progress_bar.png') no-repeat
+        background-position 0px -66px
+        height 7px
+    .ant-slider-handle  
+        background url('../../assets/img/sprite_icon.png') no-repeat
+        background-position -44px -254px
+    .bar-slider
+        margin 2px 0px
+        width 480px
+    .bar-artist
+        font-size 10px
+        color gray
+        margin-left 6px
+    .bar-cover
+        border-radius 3px
+        padding-top 4px
+    .playinfo-right
+        margin-left 20px
+        display inline-block
+        p
+            margin 0
+            line-height 10px
+        .play-duration
+            margin-left 350px
+            color lightgray
+            font-size 13px
+            .end-time   
+                color gray
+div.bar-operation
+    width 140px
+    .volume-btn
+        background-position 0px -240px
+    .order-btn
+        background-position -65px -240px
+    .playlist-btn
+        width 55px
+        background-position -45px -60px
+        position relative
+        .playlist-num
+            position absolute
+            font-size 13px
+            right 17px
+            font-style normal
+            top 10px

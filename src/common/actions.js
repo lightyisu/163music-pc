@@ -1,5 +1,5 @@
-import { getBanner,getHotRecommend, getNewAlbum, getSettleSinger, getTopranking } from '../service/request';
-import { CHANGE_BANNERS,CHANGE_HOT_RECOMMEND, CHANGE_HOT_STREAMER, CHANGE_NEW_ALBUM, CHANGE_SETTLE_SINGER, CHANGE_TOP_RANKING} from '../constants/actionType';
+import { getBanner,getHotRecommend, getNewAlbum, getSettleSinger, getSongDetail, getTopranking } from '../service/request';
+import { CHANGE_BANNERS,CHANGE_CURRENT_SONG,CHANGE_HOT_RECOMMEND, CHANGE_HOT_STREAMER, CHANGE_NEW_ALBUM, CHANGE_SETTLE_SINGER, CHANGE_TOP_RANKING} from '../constants/actionType';
 import hotStreamer from './local-data.json';
 const getBannerAction=()=>{
     return dispatch=>{
@@ -38,6 +38,15 @@ const getSettleSingerAction=()=>{
     }
 }
 
+const getSongDetailAction=(id)=>{
+    return dispatch=>{
+        getSongDetail(id).then((res)=>{
+            dispatch({type:CHANGE_CURRENT_SONG,payload:res.songs[0]})
+        })
+    }
+}
+
+
 const getHotStreamerAction=()=>({type:CHANGE_HOT_STREAMER,payload:hotStreamer.streamer})
 
-export {getBannerAction,getHotRecommendAction,getNewAlbumAction,getToprankingAction,getSettleSingerAction,getHotStreamerAction}
+export {getBannerAction,getHotRecommendAction,getNewAlbumAction,getToprankingAction,getSettleSingerAction,getHotStreamerAction,getSongDetailAction}
