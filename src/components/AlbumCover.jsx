@@ -23,8 +23,8 @@ const AlbumCover=({imgUrl,title,artist})=>{
     )
 }
 const convertCoverTitle=title=>{
-    if(title.length>17){
-        return title.slice(0,17)+'...'
+    if(title.length>14){
+        return title.slice(0,14)+'...'
     }
     else    
         return title

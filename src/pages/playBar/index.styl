@@ -51,11 +51,14 @@ div.bar-playinfo
     .playinfo-right
         margin-left 20px
         display inline-block
+        .playinfo-detail
+            width 400px
+            display inline-block
         p
             margin 0
             line-height 10px
         .play-duration
-            margin-left 350px
+            margin-left 10px
             color lightgray
             font-size 13px
             .end-time   
@@ -64,6 +67,19 @@ div.bar-operation
     width 140px
     .volume-btn
         background-position 0px -240px
+        position relative
+    .volume-panel
+        position absolute
+        height 110px
+        width 33px
+        background-position 0px -508px
+        top -105px
+        .ant-slider-track
+            background url('../../assets/img/playbar_sprite.png') 
+            background-position -40px -516px
+        .ant-slider-handle  
+            background url('../../assets/img/sprite_icon.png') no-repeat
+            background-position -44px -254px
     .order-btn
         background-position -65px -240px
     .playlist-btn

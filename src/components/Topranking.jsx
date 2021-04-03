@@ -1,5 +1,7 @@
  import React from 'react';
+import { useDispatch } from 'react-redux';
  import styled from 'styled-components';
+import { getSongDetailAction } from '../common/actions';
  import './Topranking.styl'
  const Li=styled.li`
     font-size:11px;
@@ -16,6 +18,8 @@
  `
 
  const Topranking=({imgUrl,title,tracks})=>{
+
+     const dispatch=useDispatch();
      return (
          <div style={{width:'232px'}}>
              <img style={{padding:'20px'}}  src={`${imgUrl}?param=80x80`}/>
@@ -32,7 +36,9 @@
                            {convertName(track.name)}
                            </div>
                            
-                           <a href='#' className='sprite-02 ranklist-play ranklist-btn'></a>
+                           <a  onClick={()=>{
+                               dispatch(getSongDetailAction(track.id))
+                           }} className='sprite-02 ranklist-play ranklist-btn'></a>
                            <a href='#' className='sprite-icon2 ranklist-add ranklist-btn'></a>
                            <a href='#' className='sprite-02 ranklist-collect ranklist-btn'></a>
                          
