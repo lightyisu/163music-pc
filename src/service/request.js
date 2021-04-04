@@ -61,6 +61,9 @@ const getSettleSinger=()=>(
 const getSongDetail=(id)=>(
     request.get(`/song/detail?ids=${id}`)
 )
+const getLyric=(id)=>(
+    request.get(`/lyric?id=${id}`)
+)
 
 export default request
-export {getBanner,getHotRecommend,getNewAlbum,getTopranking,getSettleSinger,getSongDetail}
+export {getBanner,getHotRecommend,getNewAlbum,getTopranking,getSettleSinger,getSongDetail,getLyric}

@@ -1,11 +1,12 @@
 
-import { CHANGE_CURRENT_SONG, CHANGE_PLAYLIST, CHANGE_PLAY_SEQUENCE, CHANGE_SONG_INDEX } from "../constants/actionType"
-import { Map } from 'immutable';
+import { CHANGE_CURRENT_SONG, CHANGE_LYRIC, CHANGE_PLAYLIST, CHANGE_PLAY_SEQUENCE, CHANGE_SONG_INDEX } from "../constants/actionType"
+import { Map} from 'immutable';
 const defaultState=Map({
     "currentSong":'',
     "currentSongIndex":'',
     "playlist":[],
-    "playSequence":0
+    "playSequence":0,
+    "lyrics":''
 })
 const player=(state=defaultState,action)=>{
     switch(action.type){
@@ -17,6 +18,8 @@ const player=(state=defaultState,action)=>{
             return state.set('playlist',action.payload)
         case CHANGE_PLAY_SEQUENCE:
             return state.set('playSequence',action.payload)
+        case CHANGE_LYRIC:
+            return state.set('lyrics',action.payload)
         default:
             return state
     }

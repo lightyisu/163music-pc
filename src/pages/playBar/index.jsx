@@ -1,9 +1,10 @@
-import { Slider } from "antd";
+import { Slider,message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changePlaySequenceAction, getSongDetailAction } from "../../common/actions";
+import { changeCurrentSongAction, changePlaySequenceAction, getSongDetailAction } from "../../common/actions";
 import moment from "moment";
 import "./index.styl";
+import { CHANGE_PLAYLIST, CHANGE_SONG_INDEX } from "../../constants/actionType";
 
 const PlayBar = (props) => {
   let dispatch = useDispatch();
@@ -14,6 +15,9 @@ const PlayBar = (props) => {
     state.get("player").get("currentSongIndex")
   );
   let playSequence = useSelector((state) => (state.get('player').get('playSequence')));
+  let playList=useSelector((state)=>(state.get("player").get('playlist')));
+  let lyrics=useSelector((state)=>(state.get('player').get('lyrics')))
+
   let audio = useRef();
   let slider = useRef();
   let prevIndex = useRef();
@@ -22,9 +26,17 @@ const PlayBar = (props) => {
   let [sliderLength, setSliderLength] = useState(0);
   let [isVolPanelOpen,setVolPanel]=useState(false)
   let [isDragging, setDragging] = useState(false);
+  let [lyricContent,setLyricContent]=useState('');
+  let [lyricsList,setLyricList]=useState([])
   useEffect(() => {
-    dispatch(getSongDetailAction(27203936));
+    dispatch(getSongDetailAction(27203936))
+    
   }, []);
+  useEffect(()=>{
+    setLyricList(lyrics)
+    
+    console.log(lyricsList)
+  },[lyrics])
   useEffect(() => {
 
     if (prevIndex.current || prevIndex.current === 0) {
@@ -52,20 +64,37 @@ const PlayBar = (props) => {
       audio.current.pause();
     }
   };
-
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+  }
   return (
     <div className="playBar sprite-playbar">
       <div className="bar-control">
-        <i className="sprite-playbar previous-btn"></i>
+        <i className="sprite-playbar previous-btn"
+            onClick={()=>{
+              if(currentSongIndex!==playList.length-1){
+                dispatch(changeCurrentSongAction(playList[currentSongIndex+1]))
+                dispatch({type:CHANGE_SONG_INDEX,payload:currentSongIndex+1})
+              }
+            }}
+        ></i>
         <i
           className={
             isPlay ? "pause-btn sprite-playbar" : "play-btn sprite-playbar"
           }
           onClick={() => {
             togglePlay();
+           
           }}
         ></i>
-        <i className="sprite-playbar next-btn"></i>
+        <i className="sprite-playbar next-btn" onClick={()=>{
+          if(currentSongIndex!==0){
+            dispatch(changeCurrentSongAction(playList[currentSongIndex-1]))
+                dispatch({type:CHANGE_SONG_INDEX,payload:currentSongIndex-1})
+          }
+        }}></i>
       </div>
       <div className="bar-playinfo">
         <img
@@ -117,8 +146,8 @@ const PlayBar = (props) => {
 
 
 
-
-        <i className="sprite-playbar order-btn" onClick={() => {
+        {/**0:顺序播放 , 1:随机播放 ,2: 单曲循环 */}
+        <i className={playSequence==0?'sprite-playbar sequential-play':(playSequence==1?'sprite-playbar random-play':'sprite-playbar single-cycle')} onClick={() => {
           //THE LOGIC OF SWITCH PLAYLIST ORDER(SEQUENCE)
           if (playSequence < 2) {
             dispatch(changePlaySequenceAction(playSequence + 1))
@@ -132,13 +161,30 @@ const PlayBar = (props) => {
 
         </i>
         <i className="sprite-playbar playlist-btn">
-          <span className="playlist-num">3</span>
+          <span className="playlist-num" style={{color:'lightgray'}}>{playList.length}</span>
         </i>
       </div>
       <audio
         ref={audio}
         src={`https://music.163.com/song/media/outer/url?id=${currentSong.id}.mp3`}
         onTimeUpdate={(e) => {
+          let lyrics1=lyricsList;
+          for(let i=0;i<lyrics1.length;i++){
+            if(audio.current.currentTime*1000>lyrics1[i].totalTime){
+              message.destroy()
+              setLyricContent(lyrics1[i+1].textContent) 
+              lyrics1.shift();
+              setLyricList(lyrics1);      
+              message.info(lyricContent,0)
+              break;
+            }
+            break;
+          }
+         
+          console.log(lyricContent)    
+
+          
+          
           if (!isDragging) {
             let currentTime = Math.floor(audio.current.currentTime);
             setCurrentTime(currentTime);
@@ -146,6 +192,25 @@ const PlayBar = (props) => {
 
           setSliderLength((currentTime / (currentSong.dt / 1000)) * 100);
           slider.current.state.value = sliderLength;
+        }}
+        onEnded={()=>{
+          if(currentSongIndex!==0&&playSequence===0){
+          let playlist_pop=playList;
+          playlist_pop.pop();
+          dispatch(changeCurrentSongAction(playList[currentSongIndex-1]))
+          dispatch({type:CHANGE_SONG_INDEX,payload:currentSongIndex-1})
+          dispatch({type:CHANGE_PLAYLIST,payload:playlist_pop})
+          }
+          else if(playSequence===2){
+            audio.current.currentTime=0;
+            audio.current.play()
+          }
+          else if(playSequence===1){
+            let index=getRandomInt(0,playList.length)
+            dispatch(changeCurrentSongAction(playList[index]));
+            dispatch({type:CHANGE_SONG_INDEX,payload:index})
+            audio.current.play()
+          }
         }}
       ></audio>
     </div>
